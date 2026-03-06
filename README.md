@@ -83,7 +83,7 @@ Go to the extension page on [Google Chrome]().
 
 ## Limitations
 
-- **IP reputation**: If your IP is listed in VPN/datacenter provider databases (MaxMind, etc.) — this extension won't help. That check happens server-side.
+- **IP reputation**: If your IP is listed in VPN/datacenter provider databases — this extension won't help. That check happens server-side.
 - **Timezone for Date**: `Date.prototype` methods depend on the OS system timezone — the extension only patches `Intl.DateTimeFormat`, which covers most detectors.
 - **After applying PRIVACY settings**: active tabs must be reloaded.
 
