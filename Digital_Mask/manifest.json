@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Digital Mask: User-Agent Switcher",
-    "version": "1.4",
+    "version": "1.0.0",
     "description": "Расширение для смены User-Agent, Client Hints, JS fingerprint и Privacy защиты",
     "permissions": [
         "declarativeNetRequest",

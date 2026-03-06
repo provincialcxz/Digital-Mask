@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            width: 430px;
+            width: 480px;
             background: #0f0f0f;
             font-family: 'Source Code Pro', monospace;
             position: relative;
@@ -63,6 +63,14 @@
         @keyframes pulse { 0%,100%{box-shadow:0 0 4px #00ff00} 50%{box-shadow:0 0 12px #00ff00} }
         .status-label { font-size: 9px; color: #444; text-transform: uppercase; letter-spacing: 1px; }
         .status-label.active { color: #00ff00; }
+        .lang-switcher { display: flex; gap: 2px; margin-left: 8px; }
+        .lang-btn {
+            font-family: 'Source Code Pro', monospace; font-size: 8px; font-weight: 600;
+            padding: 2px 5px; background: transparent; border: 1px solid #333;
+            color: #444; cursor: pointer; text-transform: uppercase; transition: all 0.2s;
+        }
+        .lang-btn:hover { border-color: #555; color: #888; }
+        .lang-btn.active { border-color: #d32f2f; color: #d32f2f; }
 
         /* REAL UA */
         .real-ua-block {
@@ -81,11 +89,11 @@
             margin-bottom: 14px; position: relative; z-index: 1;
         }
         .tab {
-            flex: 1; padding: 7px 2px; background: transparent; border: none;
+            flex: 1; padding: 7px 4px; background: transparent; border: none;
             border-bottom: 2px solid transparent;
             font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px; color: #555;
-            cursor: pointer; transition: all 0.2s;
+            text-transform: uppercase; letter-spacing: 0; color: #555;
+            cursor: pointer; transition: all 0.2s; white-space: nowrap;
         }
         .tab:hover { color: #888; }
         .tab.active { color: #d32f2f; border-bottom-color: #d32f2f; }
@@ -310,74 +318,78 @@
         <div class="status-bar">
             <span class="status-label" id="statusLabel">INACTIVE</span>
             <div class="status-dot" id="statusDot"></div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+            </div>
         </div>
     </div>
 
     <div class="real-ua-block">
-        <div class="real-ua-label">▸ real browser ua</div>
+        <div class="real-ua-label" data-i18n="realUaLabel">▸ real browser ua</div>
         <div class="real-ua-value" id="realUA">detecting...</div>
     </div>
 
     <div class="ascii-art">[░░░░░░░░░░░░░░░░░░░░]</div>
 
     <div class="tabs">
-        <button class="tab active" data-tab="select">> SELECT</button>
-        <button class="tab" data-tab="custom">> CUSTOM</button>
-        <button class="tab" data-tab="rules">> SITE RULES</button>
-        <button class="tab" data-tab="privacy">> PRIVACY</button>
-        <button class="tab" data-tab="io">> I/O</button>
+        <button class="tab active" data-tab="select" data-i18n="tabSelect">> SELECT</button>
+        <button class="tab" data-tab="custom" data-i18n="tabCustom">> CUSTOM</button>
+        <button class="tab" data-tab="rules" data-i18n="tabRules">> SITE RULES</button>
+        <button class="tab" data-tab="privacy" data-i18n="tabPrivacy">> PRIVACY</button>
+        <button class="tab" data-tab="io" data-i18n="tabIo">> I/O</button>
     </div>
 
     <!-- SELECT -->
     <div class="panel active" id="panel-select">
         <div class="group-tabs">
-            <button class="group-btn active" data-group="all">ALL</button>
-            <button class="group-btn" data-group="desktop">DESKTOP</button>
-            <button class="group-btn" data-group="mobile">MOBILE</button>
-            <button class="group-btn" data-group="bot">BOTS</button>
-            <button class="group-btn" data-group="saved">SAVED</button>
+            <button class="group-btn active" data-group="all"    data-i18n="grpAll">ALL</button>
+            <button class="group-btn" data-group="desktop" data-i18n="grpDesktop">DESKTOP</button>
+            <button class="group-btn" data-group="mobile"  data-i18n="grpMobile">MOBILE</button>
+            <button class="group-btn" data-group="bot"     data-i18n="grpBot">BOTS</button>
+            <button class="group-btn" data-group="saved"   data-i18n="grpSaved">SAVED</button>
         </div>
         <div class="input-group">
-            <label>SELECT PROFILE <span>⦿</span></label>
-            <select id="uaSelect"><option value="">> LOADING DATABASE...</option></select>
+            <label data-i18n="lblSelectProfile">SELECT PROFILE <span>⦿</span></label>
+            <select id="uaSelect"><option value="" data-i18n="optLoading">> LOADING DATABASE...</option></select>
         </div>
         <div class="button-container">
-            <button class="action-btn" id="applyBtn">> EXECUTE</button>
-            <button class="action-btn rand" id="randomBtn" title="Random UA from current group">⚄</button>
-            <button class="action-btn ghost" id="resetBtn">> RESET</button>
+            <button class="action-btn" id="applyBtn"   data-i18n="btnExecute">> EXECUTE</button>
+            <button class="action-btn rand" id="randomBtn" data-i18n-title="btnRandomTitle" title="Random UA from current group">⚄</button>
+            <button class="action-btn ghost" id="resetBtn" data-i18n="btnReset">> RESET</button>
         </div>
     </div>
 
     <!-- CUSTOM -->
     <div class="panel" id="panel-custom">
         <div class="input-group">
-            <label>MANUAL INPUT <span>⦿</span></label>
+            <label data-i18n="lblManualInput">MANUAL INPUT <span>⦿</span></label>
             <div class="custom-row">
-                <input type="text" id="uaCustom" placeholder="$ enter custom user-agent">
-                <button class="save-btn" id="saveCustomBtn">+ SAVE</button>
+                <input type="text" id="uaCustom" data-i18n-placeholder="phCustomUA" placeholder="$ enter custom user-agent">
+                <button class="save-btn" id="saveCustomBtn" data-i18n="btnSave">+ SAVE</button>
             </div>
             <div class="saved-list" id="savedList"></div>
         </div>
         <div class="button-container">
-            <button class="action-btn" id="applyCustomBtn">> EXECUTE</button>
-            <button class="action-btn ghost" id="resetCustomBtn">> RESET</button>
+            <button class="action-btn" id="applyCustomBtn"  data-i18n="btnExecute">> EXECUTE</button>
+            <button class="action-btn ghost" id="resetCustomBtn" data-i18n="btnReset">> RESET</button>
         </div>
     </div>
 
     <!-- SITE RULES -->
     <div class="panel" id="panel-rules">
         <div class="input-group">
-            <label>ADD RULE <span>⦿</span></label>
+            <label data-i18n="lblAddRule">ADD RULE <span>⦿</span></label>
             <div class="rule-form">
-                <input type="text" id="rulePattern" placeholder="$ pattern: google.com or *.youtube.com">
+                <input type="text" id="rulePattern" data-i18n-placeholder="phRulePattern" placeholder="$ pattern: google.com or *.youtube.com">
                 <div class="rule-form-row">
-                    <input type="text" id="ruleUA" placeholder="$ user-agent string">
-                    <button class="add-rule-btn" id="addRuleBtn">+ ADD</button>
+                    <input type="text" id="ruleUA" data-i18n-placeholder="phRuleUA" placeholder="$ user-agent string">
+                    <button class="add-rule-btn" id="addRuleBtn" data-i18n="btnAdd">+ ADD</button>
                 </div>
             </div>
         </div>
         <div class="input-group">
-            <label>ACTIVE RULES <span>⦿</span></label>
+            <label data-i18n="lblActiveRules">ACTIVE RULES <span>⦿</span></label>
             <div class="rules-list" id="rulesList"></div>
         </div>
     </div>
@@ -386,21 +398,21 @@
     <div class="panel" id="panel-privacy">
         <div class="privacy-row">
             <div class="privacy-info">
-                <span class="privacy-name">WEBRTC LEAK</span>
-                <span class="privacy-desc">block real IP via WebRTC</span>
+                <span class="privacy-name" data-i18n="privWebrtc">WEBRTC LEAK</span>
+                <span class="privacy-desc" data-i18n="privWebrtcDesc">block real IP via WebRTC</span>
             </div>
             <label class="toggle"><input type="checkbox" id="pWebrtc"><span class="slider"></span></label>
         </div>
         <div class="privacy-row">
             <div class="privacy-info">
-                <span class="privacy-name">JS FINGERPRINT</span>
-                <span class="privacy-desc">cores, memory, screen size</span>
+                <span class="privacy-name" data-i18n="privFingerprint">JS FINGERPRINT</span>
+                <span class="privacy-desc" data-i18n="privFingerprintDesc">cores, memory, screen size</span>
             </div>
             <label class="toggle"><input type="checkbox" id="pFingerprint"><span class="slider"></span></label>
         </div>
         <div class="privacy-sub" id="fpOptions">
             <div class="fp-row">
-                <span class="fp-label">CORES</span>
+                <span class="fp-label" data-i18n="fpCores">CORES</span>
                 <select class="fp-select" id="fpCores">
                     <option value="2">2</option>
                     <option value="4" selected>4</option>
@@ -416,7 +428,7 @@
                 </select>
             </div>
             <div class="fp-row">
-                <span class="fp-label">SCREEN</span>
+                <span class="fp-label" data-i18n="fpScreen">SCREEN</span>
                 <select class="fp-select" id="fpScreen">
                     <option value="1280x720">1280×720</option>
                     <option value="1366x768">1366×768</option>
@@ -428,33 +440,33 @@
         </div>
         <div class="privacy-row">
             <div class="privacy-info">
-                <span class="privacy-name">CANVAS NOISE</span>
-                <span class="privacy-desc">randomize canvas fingerprint</span>
+                <span class="privacy-name" data-i18n="privCanvas">CANVAS NOISE</span>
+                <span class="privacy-desc" data-i18n="privCanvasDesc">randomize canvas fingerprint</span>
             </div>
             <label class="toggle"><input type="checkbox" id="pCanvas"><span class="slider"></span></label>
         </div>
         <div class="privacy-row">
             <div class="privacy-info">
-                <span class="privacy-name">WEBGL SPOOF</span>
-                <span class="privacy-desc">hide GPU vendor/renderer</span>
+                <span class="privacy-name" data-i18n="privWebgl">WEBGL SPOOF</span>
+                <span class="privacy-desc" data-i18n="privWebglDesc">hide GPU vendor/renderer</span>
             </div>
             <label class="toggle"><input type="checkbox" id="pWebgl"><span class="slider"></span></label>
         </div>
         <div class="privacy-row">
             <div class="privacy-info">
-                <span class="privacy-name">TIMEZONE SYNC</span>
-                <span class="privacy-desc">match Intl API to your IP</span>
+                <span class="privacy-name" data-i18n="privTimezone">TIMEZONE SYNC</span>
+                <span class="privacy-desc" data-i18n="privTimezoneDesc">match Intl API to your IP</span>
             </div>
             <label class="toggle"><input type="checkbox" id="pTimezone"><span class="slider"></span></label>
         </div>
         <div class="privacy-sub" id="tzOptions">
             <div class="fp-row">
                 <span class="fp-label">TZ</span>
-                <input type="text" class="fp-input" id="tzManual" placeholder="auto (from IP) or e.g. Europe/Berlin">
+                <input type="text" class="fp-input" id="tzManual" data-i18n-placeholder="phTz" placeholder="auto (from IP) or e.g. Europe/Berlin">
             </div>
         </div>
         <div class="privacy-apply">
-            <button class="action-btn" id="applyPrivacyBtn">> APPLY SETTINGS</button>
+            <button class="action-btn" id="applyPrivacyBtn" data-i18n="btnApplyPrivacy">> APPLY SETTINGS</button>
         </div>
         <div class="privacy-status" id="privacyStatus"></div>
     </div>
@@ -462,13 +474,13 @@
     <!-- IMPORT/EXPORT -->
     <div class="panel" id="panel-io">
         <div class="input-group">
-            <label>EXPORT DATABASE <span>⦿</span></label>
+            <label data-i18n="lblExport">EXPORT DATABASE <span>⦿</span></label>
             <div class="io-row">
                 <button class="io-btn" id="exportTxt">↓ TXT</button>
                 <button class="io-btn" id="exportJson">↓ JSON</button>
             </div>
         </div>
-        <div class="io-divider">▸ IMPORT DATABASE</div>
+        <div class="io-divider" data-i18n="lblImport">▸ IMPORT DATABASE</div>
         <div class="io-row">
             <button class="io-btn" id="importTxtBtn">↑ TXT</button>
             <button class="io-btn" id="importJsonBtn">↑ JSON</button>
@@ -476,21 +488,21 @@
         <input type="file" id="importTxtFile" accept=".txt">
         <input type="file" id="importJsonFile" accept=".json">
         <div class="io-stats">
-            wordlist: <span id="ioWordlistCount">0</span> entries &nbsp;|&nbsp;
-            saved: <span id="ioSavedCount">0</span> entries
+            <span data-i18n="ioWordlist">wordlist</span>: <span id="ioWordlistCount">0</span> <span data-i18n="ioEntries">entries</span> &nbsp;|&nbsp;
+            <span data-i18n="ioSaved">saved</span>: <span id="ioSavedCount">0</span> <span data-i18n="ioEntries">entries</span>
         </div>
     </div>
 
     <div class="terminal-line">
         <span class="terminal-prompt">$></span>
-        <span id="terminalMsg">system ready</span>
+        <span id="terminalMsg" data-i18n="terminalReady">system ready</span>
         <span class="cursor"></span>
     </div>
     <div class="stats">
-        <span>database entries</span>
+        <span data-i18n="statsLabel">database entries</span>
         <span class="stats-count" id="uaCount">0</span>
     </div>
-    <div class="warning">⚡ this is not a game ⚡</div>
+    <div class="warning" data-i18n="warning">⚡ this is not a game ⚡</div>
 </div>
 <script src="popup.js"></script>
 </body>

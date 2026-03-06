@@ -1,4 +1,152 @@
 'use strict';
+var LANG = 'en';
+
+var STRINGS = {
+    en: {
+        realUaLabel:        '▸ real browser ua',
+        tabSelect:          '> SELECT',
+        tabCustom:          '> CUSTOM',
+        tabRules:           '> SITE RULES',
+        tabPrivacy:         '> PRIVACY',
+        tabIo:              '> I/O',
+        grpAll:             'ALL',
+        grpDesktop:         'DESKTOP',
+        grpMobile:          'MOBILE',
+        grpBot:             'BOTS',
+        grpSaved:           'SAVED',
+        lblSelectProfile:   'SELECT PROFILE ⦿',
+        optLoading:         '> LOADING DATABASE...',
+        optSelectProfile:   '> SELECT PROFILE',
+        optNoEntries:       '> NO ENTRIES',
+        btnExecute:         '> EXECUTE',
+        btnReset:           '> RESET',
+        btnRandomTitle:     'Random UA from current group',
+        lblManualInput:     'MANUAL INPUT ⦿',
+        phCustomUA:         '$ enter custom user-agent',
+        btnSave:            '+ SAVE',
+        btnSaved:           '✓ SAVED',
+        lblAddRule:         'ADD RULE ⦿',
+        phRulePattern:      '$ pattern: google.com or *.youtube.com',
+        phRuleUA:           '$ user-agent string',
+        btnAdd:             '+ ADD',
+        lblActiveRules:     'ACTIVE RULES ⦿',
+        noSavedEntries:     '> NO SAVED ENTRIES',
+        noRules:            '> NO RULES DEFINED',
+        privWebrtc:         'WEBRTC LEAK',
+        privWebrtcDesc:     'block real IP via WebRTC',
+        privFingerprint:    'JS FINGERPRINT',
+        privFingerprintDesc:'cores, memory, screen size',
+        fpCores:            'CORES',
+        fpMemory:           'MEMORY',
+        fpScreen:           'SCREEN',
+        privCanvas:         'CANVAS NOISE',
+        privCanvasDesc:     'randomize canvas fingerprint',
+        privWebgl:          'WEBGL SPOOF',
+        privWebglDesc:      'hide GPU vendor/renderer',
+        privTimezone:       'TIMEZONE SYNC',
+        privTimezoneDesc:   'match Intl API to your IP',
+        phTz:               'auto (from IP) or e.g. Europe/Berlin',
+        btnApplyPrivacy:    '> APPLY SETTINGS',
+        privacyApplied:     '[✓] APPLIED — reload tabs to activate',
+        lblExport:          'EXPORT DATABASE ⦿',
+        lblImport:          '▸ IMPORT DATABASE',
+        ioWordlist:         'wordlist',
+        ioSaved:            'saved',
+        ioEntries:          'entries',
+        terminalReady:      'system ready',
+        statsLabel:         'database entries',
+        warning:            '⚡ this is not a game ⚡',
+        alertNoUA:          '[!] SELECT OR ENTER USER-AGENT',
+        alertFillBoth:      '[!] FILL BOTH FIELDS',
+        alertPatternExists: '[!] PATTERN ALREADY EXISTS',
+        alertInvalidJson:   '[!] INVALID JSON FILE',
+        termAutoSaved:      'auto-saved ua',
+        termRuleAdded:      'rule added: ',
+        termRandom:         'random: ',
+        termSpoofActive:    'spoof active',
+        termReady:          'system ready',
+        termDBLoaded:       'db loaded: ',
+        termEntries:        ' entries',
+        termImportedTxt:    'imported {n} from txt',
+        termImportedJson:   'imported {n} from json',
+        termPrivacySaved:   'privacy settings saved',
+        termNoGroup:        'no UA in this group',
+    },
+    ru: {
+        realUaLabel:        '▸ реальный юа браузера',
+        tabSelect:          '> ВЫБОР',
+        tabCustom:          '> СВОЙ ЮА',
+        tabRules:           '> ПРАВИЛА',
+        tabPrivacy:         '> ПРИВАТНОСТЬ',
+        tabIo:              '> И/Э',
+        grpAll:             'ВСЕ',
+        grpDesktop:         'ПК',
+        grpMobile:          'МОБИЛ',
+        grpBot:             'БОТЫ',
+        grpSaved:           'СОХР.',
+        lblSelectProfile:   'ВЫБРАТЬ ПРОФИЛЬ ⦿',
+        optLoading:         '> ЗАГРУЗКА БАЗЫ...',
+        optSelectProfile:   '> ВЫБРАТЬ ПРОФИЛЬ',
+        optNoEntries:       '> НЕТ ЗАПИСЕЙ',
+        btnExecute:         '> ПРИМЕНИТЬ',
+        btnReset:           '> СБРОСИТЬ',
+        btnRandomTitle:     'Случайный ЮА из текущей группы',
+        lblManualInput:     'ВВОД ВРУЧНУЮ ⦿',
+        phCustomUA:         '$ введите свой user-agent',
+        btnSave:            '+ СОХРАНИТЬ',
+        btnSaved:           '✓ СОХРАНЕНО',
+        lblAddRule:         'ДОБАВИТЬ ПРАВИЛО ⦿',
+        phRulePattern:      '$ шаблон: google.com или *.youtube.com',
+        phRuleUA:           '$ строка user-agent',
+        btnAdd:             '+ ДОБАВИТЬ',
+        lblActiveRules:     'АКТИВНЫЕ ПРАВИЛА ⦿',
+        noSavedEntries:     '> НЕТ СОХРАНЁННЫХ ЗАПИСЕЙ',
+        noRules:            '> ПРАВИЛА НЕ ЗАДАНЫ',
+        privWebrtc:         'УТЕЧКА WEBRTC',
+        privWebrtcDesc:     'скрыть реальный IP через WebRTC',
+        privFingerprint:    'JS ОТПЕЧАТОК',
+        privFingerprintDesc:'ядра, память, разрешение экрана',
+        fpCores:            'ЯДРА',
+        fpMemory:           'ПАМЯТЬ',
+        fpScreen:           'ЭКРАН',
+        privCanvas:         'ШУМ CANVAS',
+        privCanvasDesc:     'рандомизировать canvas отпечаток',
+        privWebgl:          'ПОДМЕНА WEBGL',
+        privWebglDesc:      'скрыть GPU vendor/renderer',
+        privTimezone:       'СИНХР. TIMEZONE',
+        privTimezoneDesc:   'синхронизировать Intl API с IP',
+        phTz:               'авто (по IP) или напр. Europe/Moscow',
+        btnApplyPrivacy:    '> ПРИМЕНИТЬ НАСТРОЙКИ',
+        privacyApplied:     '[✓] СОХРАНЕНО — перезагрузите вкладки',
+        lblExport:          'ЭКСПОРТ БАЗЫ ⦿',
+        lblImport:          '▸ ИМПОРТ БАЗЫ',
+        ioWordlist:         'база',
+        ioSaved:            'свои',
+        ioEntries:          'записей',
+        terminalReady:      'система готова',
+        statsLabel:         'записей в базе',
+        warning:            '⚡ this is not a game ⚡',
+        alertNoUA:          '[!] ВЫБЕРИТЕ ИЛИ ВВЕДИТЕ USER-AGENT',
+        alertFillBoth:      '[!] ЗАПОЛНИТЕ ОБА ПОЛЯ',
+        alertPatternExists: '[!] ТАКОЙ ШАБЛОН УЖЕ СУЩЕСТВУЕТ',
+        alertInvalidJson:   '[!] НЕКОРРЕКТНЫЙ JSON ФАЙЛ',
+        termAutoSaved:      'ua автосохранён',
+        termRuleAdded:      'правило добавлено: ',
+        termRandom:         'случайный: ',
+        termSpoofActive:    'подмена активна',
+        termReady:          'система готова',
+        termDBLoaded:       'база загружена: ',
+        termEntries:        ' записей',
+        termImportedTxt:    'импортировано {n} из txt',
+        termImportedJson:   'импортировано {n} из json',
+        termPrivacySaved:   'настройки приватности сохранены',
+        termNoGroup:        'нет ЮА в этой группе',
+    }
+};
+
+function t(key) {
+    return (STRINGS[LANG] && STRINGS[LANG][key]) || STRINGS['en'][key] || key;
+}
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let allUAs      = [];   // wordlist.txt
@@ -48,12 +196,12 @@ function updateStatus(isActive) {
         dot.className   = 'status-dot active';
         label.className = 'status-label active';
         label.textContent = 'ACTIVE';
-        setTerminal('spoof active');
+        setTerminal(t('termSpoofActive'));
     } else {
         dot.className   = 'status-dot';
         label.className = 'status-label';
         label.textContent = 'INACTIVE';
-        setTerminal('system ready');
+        setTerminal(t('termReady'));
     }
 }
 
@@ -130,9 +278,9 @@ function renderSavedList() {
         item.appendChild(del);
         list.appendChild(item);
     });
+    if (typeof updateSavedListEmptyText === 'function') updateSavedListEmptyText();
 }
 
-// ─── WORDLIST ─────────────────────────────────────────────────────────────────
 function loadWordlist(cb) {
     var url = chrome.runtime.getURL('wordlist.txt');
     fetch(url)
@@ -188,13 +336,13 @@ function renderSelect() {
 // ─── RANDOM ───────────────────────────────────────────────────────────────────
 function pickRandom() {
     var pool = getFilteredUAs();
-    if (pool.length === 0) { setTerminal('no UA in this group'); return; }
+    if (pool.length === 0) { setTerminal(t('termNoGroup')); return; }
     var ua = pool[Math.floor(Math.random() * pool.length)];
     var select = document.getElementById('uaSelect');
     if (select) select.value = ua;
     selectedUA = ua;
     applyUA(ua);
-    setTerminal('random: ' + truncate(ua, 38));
+    setTerminal(t('termRandom') + truncate(ua, 38));
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
@@ -223,7 +371,7 @@ function initGroups() {
 
 // ─── APPLY / RESET ────────────────────────────────────────────────────────────
 function applyUA(ua) {
-    if (!ua) { alert('[!] SELECT OR ENTER USER-AGENT'); return; }
+    if (!ua) { alert(t('alertNoUA')); return; }
     chrome.runtime.sendMessage({ action: 'setUserAgent', ua: ua });
     updateStatus(true);
 }
@@ -249,7 +397,7 @@ function initCustomInput() {
         if (!val) return;
         debounceTimer = setTimeout(function() {
             if (saveCustomUA(val)) {
-                setTerminal('auto-saved ua');
+                setTerminal(t('termAutoSaved'));
             }
         }, 2000);
     });
@@ -343,10 +491,10 @@ function initRulesPanel() {
     addBtn.addEventListener('click', function() {
         var pattern = document.getElementById('rulePattern').value.trim();
         var ua      = document.getElementById('ruleUA').value.trim();
-        if (!pattern || !ua) { alert('[!] FILL BOTH FIELDS'); return; }
+        if (!pattern || !ua) { alert(t('alertFillBoth')); return; }
 
         var exists = siteRules.some(function(r) { return r.pattern === pattern; });
-        if (exists) { alert('[!] PATTERN ALREADY EXISTS'); return; }
+        if (exists) { alert(t('alertPatternExists')); return; }
 
         siteRules.push({ pattern: pattern, ua: ua, enabled: true });
         persistSiteRules(function() {
@@ -354,7 +502,7 @@ function initRulesPanel() {
             applyAllSiteRules();
             document.getElementById('rulePattern').value = '';
             document.getElementById('ruleUA').value = '';
-            setTerminal('rule added: ' + pattern);
+            setTerminal(t('termRuleAdded') + pattern);
         });
     });
 
@@ -406,7 +554,7 @@ function importTxt(file) {
         });
         persistSaved(function() {
             renderSavedList(); renderSelect(); updateUACount(); updateIOStats();
-            setTerminal('imported ' + added + ' from txt');
+            setTerminal(t('termImportedTxt').replace('{n}', added));
         });
     };
     reader.readAsText(file);
@@ -438,7 +586,7 @@ function importJson(file) {
                 setTerminal('imported ' + added + ' from json');
             });
         } catch(err) {
-            alert('[!] INVALID JSON FILE');
+            alert(t('alertInvalidJson'));
         }
     };
     reader.readAsText(file);
@@ -451,6 +599,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCustomInput();
     initRulesPanel();
     initPrivacyPanel();
+    initLang();
     showRealUA();
 
     chrome.storage.sync.get('spoofedUA', function(data) {
@@ -468,7 +617,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderRulesList();
         updateUACount();
         updateIOStats();
-        setTerminal('db loaded: ' + (allUAs.length + savedUAs.length) + ' entries');
+        setTerminal(t('termDBLoaded') + (allUAs.length + savedUAs.length) + t('termEntries'));
     }
 
     loadWordlist(function() { wordlistDone = true; onAllLoaded(); });
@@ -601,8 +750,8 @@ function initPrivacyPanel() {
 
         savePrivacySettings(settings, function() {
             chrome.runtime.sendMessage({ action: 'setPrivacy', settings: settings });
-            setStatus('[✓] APPLIED — reload tabs to activate', 'ok');
-            setTerminal('privacy settings saved');
+            setStatus(t('privacyApplied'), 'ok');
+            setTerminal(t('termPrivacySaved'));
         });
     });
 }
@@ -617,4 +766,71 @@ function setStatus(msg, cls) {
     if (!el) return;
     el.textContent = msg;
     el.className = 'privacy-status' + (cls ? ' ' + cls : '');
+}
+
+// ─── I18N ────────────────────────────────────────────────────────────────────
+
+function applyLang(lang) {
+    LANG = lang;
+    chrome.storage.sync.set({ lang: lang });
+
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.lang === lang);
+    });
+
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n');
+        var val = t(key);
+        if (el.tagName === 'LABEL') {
+            el.childNodes[0].textContent = val + ' ';
+        } else {
+            el.textContent = val;
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+        el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+    });
+
+    document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+        el.title = t(el.getAttribute('data-i18n-title'));
+    });
+
+    var termEl = document.getElementById('terminalMsg');
+    if (termEl) termEl.textContent = t('terminalReady');
+
+    updateSavedListEmptyText();
+}
+
+function updateSavedListEmptyText() {
+    var list = document.getElementById('savedList');
+    if (!list) return;
+    var ph = list.querySelector('.saved-empty');
+    if (savedUAs.length === 0) {
+        if (!ph) {
+            ph = document.createElement('div');
+            ph.className = 'saved-empty';
+            ph.style.cssText = 'padding:8px 10px;font-size:10px;color:#444;';
+            list.appendChild(ph);
+        }
+        ph.textContent = t('noSavedEntries');
+    } else if (ph) {
+        ph.remove();
+    }
+}
+
+function initLang() {
+    chrome.storage.sync.get('lang', function(data) {
+        var lang = data.lang || 'en';
+        applyLang(lang);
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            applyLang(this.dataset.lang);
+            renderSelect();
+            renderSavedList();
+            renderRulesList();
+        });
+    });
 }
