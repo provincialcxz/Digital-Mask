@@ -523,7 +523,7 @@ function exportTxt() {
 
 function exportJson() {
     var data = {
-        version: '1.3',
+        version: '1.0.0',
         exported: new Date().toISOString(),
         wordlist: allUAs,
         custom: savedUAs,
