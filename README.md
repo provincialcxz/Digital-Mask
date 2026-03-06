@@ -1,5 +1,5 @@
-# [FSOCIETY]
-# Digital-Mask: User-Agent Switcher
+# [FSOCIETY]      
+# Digital-Mask: User-Agent Switcher    
 
 > *"Hello, friend."*
 
@@ -7,7 +7,7 @@
 
 A Google Chrome extension for full browser fingerprint spoofing — User-Agent, Client Hints, JS properties, Canvas, WebGL, and WebRTC IP leak protection.
 
----
+
 
 ## Features
 
@@ -53,21 +53,21 @@ A Google Chrome extension for full browser fingerprint spoofing — User-Agent, 
 - Spoofing activity indicator
 - Displays the real browser UA
 
----
+
 
 ## Installation
 
+**Preferred option:**   
 Go to the extension page on [Google Chrome]().
 
-or
-
+**Local assembly:**   
 1. Download or clone the repository
 2. Open `chrome://extensions`
 3. Enable **Developer mode**
 4. Click **Load unpacked**
 5. Select the extension folder
 
----
+
 
 ## Permissions
 
@@ -78,7 +78,7 @@ or
 | `storage` | Saving settings and profiles |
 | `privacy` | Managing WebRTC policy |
 
----
+
 
 ## Limitations
 
@@ -86,7 +86,7 @@ or
 - **Timezone for Date**: `Date.prototype` methods depend on the OS system timezone — the extension only patches `Intl.DateTimeFormat`, which covers most detectors.
 - **After applying PRIVACY settings**: active tabs must be reloaded.
 
----
+
 
 ## Author
 
