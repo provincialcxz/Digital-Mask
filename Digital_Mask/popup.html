@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            width: 430px;
+            background: #0f0f0f;
+            font-family: 'Source Code Pro', monospace;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: repeating-linear-gradient(45deg,rgba(255,255,255,0.02) 0px,rgba(255,255,255,0.02) 2px,transparent 2px,transparent 4px);
+            pointer-events: none; z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            margin: 15px;
+            padding: 22px 20px 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 1;
+        }
+        .fsociety-mask {
+            position: absolute; top: -20px; right: -20px;
+            width: 80px; height: 80px;
+            background: #d32f2f; border-radius: 50%;
+            opacity: 0.1; filter: blur(10px);
+            z-index: 0; pointer-events: none;
+        }
+
+        /* HEADER */
+        .header {
+            margin-bottom: 14px; position: relative; z-index: 1;
+            display: flex; align-items: flex-start; justify-content: space-between;
+        }
+        .header-left { flex: 1; }
+        .fsociety-logo {
+            font-size: 20px; font-weight: 600; color: #d32f2f;
+            letter-spacing: 2px; text-transform: uppercase; display: inline-block;
+        }
+        .fsociety-logo::before { content: '['; color: #666; margin-right: 5px; }
+        .fsociety-logo::after  { content: ']'; color: #666; margin-left: 5px; }
+        .tagline {
+            color: #666; font-size: 10px; border-left: 2px solid #d32f2f;
+            padding-left: 10px; margin-top: 7px;
+            text-transform: uppercase; letter-spacing: 3px;
+        }
+        .status-bar { display: flex; align-items: center; gap: 6px; padding-top: 4px; }
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #444;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .status-dot.active { background: #00ff00; box-shadow: 0 0 8px #00ff00; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{box-shadow:0 0 4px #00ff00} 50%{box-shadow:0 0 12px #00ff00} }
+        .status-label { font-size: 9px; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+        .status-label.active { color: #00ff00; }
+
+        /* REAL UA */
+        .real-ua-block {
+            background: #0f0f0f; border: 1px solid #2a2a2a; border-left: 3px solid #333;
+            padding: 6px 10px; margin-bottom: 12px; position: relative; z-index: 1;
+        }
+        .real-ua-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px; }
+        .real-ua-value { font-size: 9px; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ASCII */
+        .ascii-art { color: #333; font-size: 8px; text-align: center; margin: 0 0 12px; white-space: pre; position: relative; z-index: 1; }
+
+        /* TABS */
+        .tabs {
+            display: flex; border-bottom: 1px solid #333;
+            margin-bottom: 14px; position: relative; z-index: 1;
+        }
+        .tab {
+            flex: 1; padding: 7px 2px; background: transparent; border: none;
+            border-bottom: 2px solid transparent;
+            font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px; color: #555;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .tab:hover { color: #888; }
+        .tab.active { color: #d32f2f; border-bottom-color: #d32f2f; }
+
+        /* PANELS */
+        .panel { display: none; position: relative; z-index: 1; }
+        .panel.active { display: block; }
+
+        /* GROUP BUTTONS */
+        .group-tabs { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
+        .group-btn {
+            font-family: 'Source Code Pro', monospace; font-size: 9px; padding: 3px 8px;
+            background: #0f0f0f; border: 1px solid #333; color: #555;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s;
+        }
+        .group-btn:hover { border-color: #555; color: #888; }
+        .group-btn.active { background: rgba(211,47,47,0.1); border-color: #d32f2f; color: #d32f2f; }
+
+        /* INPUT GROUP */
+        .input-group { margin-bottom: 12px; position: relative; }
+        .input-group label {
+            display: block; color: #888; font-size: 10px;
+            margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .input-group label span { color: #d32f2f; margin-left: 5px; }
+
+        /* INPUTS */
+        select, input[type="text"] {
+            width: 100%; padding: 10px 12px;
+            background: #0f0f0f; border: 1px solid #333;
+            color: #00ff00; font-family: 'Source Code Pro', monospace;
+            font-size: 11px; outline: none; transition: all 0.3s ease;
+        }
+        select {
+            cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d32f2f' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px;
+        }
+        select:focus, input[type="text"]:focus { border-color: #d32f2f; box-shadow: 0 0 15px rgba(211,47,47,0.3); }
+        select option { background: #0f0f0f; color: #00ff00; padding: 10px; }
+        input[type="text"]::placeholder { color: #333; font-style: italic; }
+
+        /* CUSTOM ROW */
+        .custom-row { display: flex; gap: 6px; align-items: stretch; }
+        .custom-row input { flex: 1; }
+        .save-btn {
+            padding: 10px 10px; background: #0f0f0f; border: 1px solid #333;
+            color: #555; font-family: 'Source Code Pro', monospace;
+            font-size: 10px; font-weight: 600; text-transform: uppercase;
+            cursor: pointer; white-space: nowrap; transition: all 0.2s; flex-shrink: 0;
+        }
+        .save-btn:hover { border-color: #00ff00; color: #00ff00; }
+        .save-btn.saved  { border-color: #00ff00; color: #00ff00; }
+
+        /* SAVED LIST */
+        .saved-list {
+            max-height: 90px; overflow-y: auto;
+            border: 1px solid #2a2a2a; background: #0f0f0f; margin-top: 8px; margin-bottom: 12px;
+        }
+        .saved-list:empty::after { content: '> NO SAVED ENTRIES'; display: block; padding: 8px 10px; font-size: 10px; color: #444; }
+        .saved-item { display: flex; align-items: center; padding: 5px 8px; border-bottom: 1px solid #222; cursor: pointer; transition: background 0.15s; gap: 6px; }
+        .saved-item:last-child { border-bottom: none; }
+        .saved-item:hover { background: rgba(211,47,47,0.08); }
+        .saved-item.selected { background: rgba(211,47,47,0.12); }
+        .saved-item-text { flex: 1; font-size: 10px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .saved-item-del { color: #444; font-size: 11px; cursor: pointer; padding: 0 2px; flex-shrink: 0; transition: color 0.15s; }
+        .saved-item-del:hover { color: #d32f2f; }
+        .saved-list::-webkit-scrollbar { width: 3px; }
+        .saved-list::-webkit-scrollbar-track { background: #0f0f0f; }
+        .saved-list::-webkit-scrollbar-thumb { background: #333; }
+
+        /* BUTTONS */
+        .button-container { display: flex; gap: 8px; margin-top: 10px; }
+        button.action-btn {
+            flex: 1; padding: 11px; background: transparent; border: 1px solid #d32f2f;
+            color: #d32f2f; font-family: 'Source Code Pro', monospace;
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s ease;
+        }
+        button.action-btn::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 2px; background: #d32f2f;
+            transform: scaleX(0); transition: transform 0.3s ease;
+        }
+        button.action-btn:hover::after { transform: scaleX(1); }
+        button.action-btn:hover { background: rgba(211,47,47,0.1); text-shadow: 0 0 8px rgba(211,47,47,0.5); }
+        button.action-btn.ghost { border-color: #333; color: #555; }
+        button.action-btn.ghost::after { background: #333; }
+        button.action-btn.ghost:hover { background: rgba(255,255,255,0.03); color: #888; border-color: #555; }
+        button.action-btn.rand { flex: 0 0 auto; padding: 11px 14px; border-color: #333; color: #555; font-size: 14px; letter-spacing: 0; }
+        button.action-btn.rand:hover { border-color: #d32f2f; color: #d32f2f; }
+
+        /* SITE RULES */
+        .rules-list {
+            max-height: 160px; overflow-y: auto;
+            border: 1px solid #2a2a2a; background: #0f0f0f; margin-bottom: 12px;
+        }
+        .rules-list:empty::after { content: '> NO RULES DEFINED'; display: block; padding: 8px 10px; font-size: 10px; color: #444; }
+        .rule-item {
+            display: flex; align-items: center; padding: 6px 8px;
+            border-bottom: 1px solid #222; gap: 6px;
+        }
+        .rule-item:last-child { border-bottom: none; }
+        .rule-toggle {
+            width: 8px; height: 8px; border-radius: 50%; background: #333;
+            cursor: pointer; flex-shrink: 0; transition: background 0.2s;
+        }
+        .rule-toggle.on { background: #00ff00; box-shadow: 0 0 5px #00ff00; }
+        .rule-pattern { font-size: 10px; color: #d32f2f; min-width: 90px; flex-shrink: 0; }
+        .rule-ua { flex: 1; font-size: 9px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rule-del { color: #444; font-size: 11px; cursor: pointer; flex-shrink: 0; transition: color 0.15s; }
+        .rule-del:hover { color: #d32f2f; }
+        .rules-list::-webkit-scrollbar { width: 3px; }
+        .rules-list::-webkit-scrollbar-track { background: #0f0f0f; }
+        .rules-list::-webkit-scrollbar-thumb { background: #333; }
+        .rule-form { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+        .rule-form input[type="text"] { font-size: 10px; padding: 8px 10px; }
+        .rule-form-row { display: flex; gap: 6px; }
+        .rule-form-row input { flex: 1; }
+        .add-rule-btn {
+            padding: 8px 14px; background: #0f0f0f; border: 1px solid #333;
+            color: #555; font-family: 'Source Code Pro', monospace; font-size: 10px;
+            font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+            flex-shrink: 0; white-space: nowrap;
+        }
+        .add-rule-btn:hover { border-color: #d32f2f; color: #d32f2f; }
+
+        /* IO PANEL */
+        .io-row { display: flex; gap: 10px; margin-bottom: 0; }
+        .io-btn {
+            flex: 1; padding: 11px; background: transparent; border: 1px solid #333;
+            color: #555; font-family: 'Source Code Pro', monospace;
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s ease;
+        }
+        .io-btn::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #d32f2f; transform: scaleX(0); transition: transform 0.3s ease; }
+        .io-btn:hover::after { transform: scaleX(1); }
+        .io-btn:hover { border-color: #d32f2f; color: #d32f2f; text-shadow: 0 0 8px rgba(211,47,47,0.5); }
+        .io-divider { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin: 14px 0 10px; border-top: 1px solid #2a2a2a; padding-top: 12px; }
+        .io-stats { font-size: 11px; color: #555; margin-top: 12px; text-align: center; }
+        .io-stats span { color: #00ff00; }
+        input[type="file"] { display: none; }
+
+        /* TERMINAL + STATS */
+        .terminal-line {
+            margin-top: 14px; padding: 8px; background: #0f0f0f;
+            border-left: 3px solid #d32f2f; font-size: 10px; color: #555;
+            display: flex; gap: 10px; position: relative; z-index: 1;
+        }
+        .terminal-prompt { color: #d32f2f; }
+        #terminalMsg { flex: 1; }
+        .stats {
+            background: #0f0f0f; border: 1px solid #333; padding: 8px 10px;
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 11px; color: #666; margin-top: 10px; position: relative; z-index: 1;
+        }
+        .stats-count { color: #00ff00; font-weight: 600; background: #1a1a1a; padding: 2px 8px; border: 1px solid #333; }
+        .warning { color: #d32f2f; font-size: 9px; text-align: center; margin-top: 10px; opacity: 0.7; position: relative; z-index: 1; }
+        .cursor { display: inline-block; width: 7px; height: 13px; background: #d32f2f; animation: blinkCursor 1s infinite; vertical-align: middle; }
+        @keyframes blinkCursor { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* PRIVACY PANEL */
+        .privacy-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 0; border-bottom: 1px solid #222;
+        }
+        .privacy-row:last-of-type { border-bottom: none; }
+        .privacy-info { display: flex; flex-direction: column; gap: 2px; }
+        .privacy-name { font-size: 10px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+        .privacy-desc { font-size: 9px; color: #444; }
+        .toggle { position: relative; display: inline-block; width: 32px; height: 16px; flex-shrink: 0; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #222; border: 1px solid #333; transition: 0.2s;
+        }
+        .slider::before {
+            content: ''; position: absolute;
+            width: 10px; height: 10px; left: 2px; bottom: 2px;
+            background: #444; transition: 0.2s;
+        }
+        .toggle input:checked + .slider { background: rgba(211,47,47,0.2); border-color: #d32f2f; }
+        .toggle input:checked + .slider::before { background: #d32f2f; transform: translateX(16px); box-shadow: 0 0 4px #d32f2f; }
+        .privacy-sub {
+            background: #0f0f0f; border: 1px solid #222; border-left: 2px solid #d32f2f;
+            padding: 8px 10px; margin: 4px 0 8px; display: none;
+        }
+        .privacy-sub.visible { display: block; }
+        .fp-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .fp-row:last-child { margin-bottom: 0; }
+        .fp-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 1px; min-width: 44px; }
+        .fp-select {
+            flex: 1; padding: 4px 6px; background: #1a1a1a; border: 1px solid #333;
+            color: #00ff00; font-family: 'Source Code Pro', monospace; font-size: 10px;
+            outline: none; appearance: none; cursor: pointer;
+        }
+        .fp-select:focus { border-color: #d32f2f; }
+        .fp-input {
+            flex: 1; padding: 4px 6px; background: #1a1a1a; border: 1px solid #333;
+            color: #00ff00; font-family: 'Source Code Pro', monospace; font-size: 10px;
+            outline: none; margin-bottom: 0 !important;
+        }
+        .fp-input:focus { border-color: #d32f2f; }
+        .fp-input::placeholder { color: #333; font-style: italic; }
+        .privacy-apply { margin-top: 12px; }
+        .privacy-status { font-size: 9px; color: #555; text-align: center; margin-top: 6px; min-height: 14px; }
+        .privacy-status.ok  { color: #00ff00; }
+        .privacy-status.err { color: #d32f2f; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="fsociety-mask"></div>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="fsociety-logo">FSOCIETY</div>
+            <div class="tagline">"HELLO, FRIEND"</div>
+            <!-- <div class="tagline">"MY NAME IS #@!$%&"</div> -->
+        </div>
+        <div class="status-bar">
+            <span class="status-label" id="statusLabel">INACTIVE</span>
+            <div class="status-dot" id="statusDot"></div>
+        </div>
+    </div>
+
+    <div class="real-ua-block">
+        <div class="real-ua-label">▸ real browser ua</div>
+        <div class="real-ua-value" id="realUA">detecting...</div>
+    </div>
+
+    <div class="ascii-art">[░░░░░░░░░░░░░░░░░░░░]</div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="select">> SELECT</button>
+        <button class="tab" data-tab="custom">> CUSTOM</button>
+        <button class="tab" data-tab="rules">> SITE RULES</button>
+        <button class="tab" data-tab="privacy">> PRIVACY</button>
+        <button class="tab" data-tab="io">> I/O</button>
+    </div>
+
+    <!-- SELECT -->
+    <div class="panel active" id="panel-select">
+        <div class="group-tabs">
+            <button class="group-btn active" data-group="all">ALL</button>
+            <button class="group-btn" data-group="desktop">DESKTOP</button>
+            <button class="group-btn" data-group="mobile">MOBILE</button>
+            <button class="group-btn" data-group="bot">BOTS</button>
+            <button class="group-btn" data-group="saved">SAVED</button>
+        </div>
+        <div class="input-group">
+            <label>SELECT PROFILE <span>⦿</span></label>
+            <select id="uaSelect"><option value="">> LOADING DATABASE...</option></select>
+        </div>
+        <div class="button-container">
+            <button class="action-btn" id="applyBtn">> EXECUTE</button>
+            <button class="action-btn rand" id="randomBtn" title="Random UA from current group">⚄</button>
+            <button class="action-btn ghost" id="resetBtn">> RESET</button>
+        </div>
+    </div>
+
+    <!-- CUSTOM -->
+    <div class="panel" id="panel-custom">
+        <div class="input-group">
+            <label>MANUAL INPUT <span>⦿</span></label>
+            <div class="custom-row">
+                <input type="text" id="uaCustom" placeholder="$ enter custom user-agent">
+                <button class="save-btn" id="saveCustomBtn">+ SAVE</button>
+            </div>
+            <div class="saved-list" id="savedList"></div>
+        </div>
+        <div class="button-container">
+            <button class="action-btn" id="applyCustomBtn">> EXECUTE</button>
+            <button class="action-btn ghost" id="resetCustomBtn">> RESET</button>
+        </div>
+    </div>
+
+    <!-- SITE RULES -->
+    <div class="panel" id="panel-rules">
+        <div class="input-group">
+            <label>ADD RULE <span>⦿</span></label>
+            <div class="rule-form">
+                <input type="text" id="rulePattern" placeholder="$ pattern: google.com or *.youtube.com">
+                <div class="rule-form-row">
+                    <input type="text" id="ruleUA" placeholder="$ user-agent string">
+                    <button class="add-rule-btn" id="addRuleBtn">+ ADD</button>
+                </div>
+            </div>
+        </div>
+        <div class="input-group">
+            <label>ACTIVE RULES <span>⦿</span></label>
+            <div class="rules-list" id="rulesList"></div>
+        </div>
+    </div>
+
+    <!-- PRIVACY -->
+    <div class="panel" id="panel-privacy">
+        <div class="privacy-row">
+            <div class="privacy-info">
+                <span class="privacy-name">WEBRTC LEAK</span>
+                <span class="privacy-desc">block real IP via WebRTC</span>
+            </div>
+            <label class="toggle"><input type="checkbox" id="pWebrtc"><span class="slider"></span></label>
+        </div>
+        <div class="privacy-row">
+            <div class="privacy-info">
+                <span class="privacy-name">JS FINGERPRINT</span>
+                <span class="privacy-desc">cores, memory, screen size</span>
+            </div>
+            <label class="toggle"><input type="checkbox" id="pFingerprint"><span class="slider"></span></label>
+        </div>
+        <div class="privacy-sub" id="fpOptions">
+            <div class="fp-row">
+                <span class="fp-label">CORES</span>
+                <select class="fp-select" id="fpCores">
+                    <option value="2">2</option>
+                    <option value="4" selected>4</option>
+                    <option value="8">8</option>
+                    <option value="16">16</option>
+                </select>
+                <span class="fp-label">MEMORY</span>
+                <select class="fp-select" id="fpMemory">
+                    <option value="2">2 GB</option>
+                    <option value="4">4 GB</option>
+                    <option value="8" selected>8 GB</option>
+                    <option value="16">16 GB</option>
+                </select>
+            </div>
+            <div class="fp-row">
+                <span class="fp-label">SCREEN</span>
+                <select class="fp-select" id="fpScreen">
+                    <option value="1280x720">1280×720</option>
+                    <option value="1366x768">1366×768</option>
+                    <option value="1920x1080" selected>1920×1080</option>
+                    <option value="2560x1440">2560×1440</option>
+                    <option value="3840x2160">3840×2160</option>
+                </select>
+            </div>
+        </div>
+        <div class="privacy-row">
+            <div class="privacy-info">
+                <span class="privacy-name">CANVAS NOISE</span>
+                <span class="privacy-desc">randomize canvas fingerprint</span>
+            </div>
+            <label class="toggle"><input type="checkbox" id="pCanvas"><span class="slider"></span></label>
+        </div>
+        <div class="privacy-row">
+            <div class="privacy-info">
+                <span class="privacy-name">WEBGL SPOOF</span>
+                <span class="privacy-desc">hide GPU vendor/renderer</span>
+            </div>
+            <label class="toggle"><input type="checkbox" id="pWebgl"><span class="slider"></span></label>
+        </div>
+        <div class="privacy-row">
+            <div class="privacy-info">
+                <span class="privacy-name">TIMEZONE SYNC</span>
+                <span class="privacy-desc">match Intl API to your IP</span>
+            </div>
+            <label class="toggle"><input type="checkbox" id="pTimezone"><span class="slider"></span></label>
+        </div>
+        <div class="privacy-sub" id="tzOptions">
+            <div class="fp-row">
+                <span class="fp-label">TZ</span>
+                <input type="text" class="fp-input" id="tzManual" placeholder="auto (from IP) or e.g. Europe/Berlin">
+            </div>
+        </div>
+        <div class="privacy-apply">
+            <button class="action-btn" id="applyPrivacyBtn">> APPLY SETTINGS</button>
+        </div>
+        <div class="privacy-status" id="privacyStatus"></div>
+    </div>
+
+    <!-- IMPORT/EXPORT -->
+    <div class="panel" id="panel-io">
+        <div class="input-group">
+            <label>EXPORT DATABASE <span>⦿</span></label>
+            <div class="io-row">
+                <button class="io-btn" id="exportTxt">↓ TXT</button>
+                <button class="io-btn" id="exportJson">↓ JSON</button>
+            </div>
+        </div>
+        <div class="io-divider">▸ IMPORT DATABASE</div>
+        <div class="io-row">
+            <button class="io-btn" id="importTxtBtn">↑ TXT</button>
+            <button class="io-btn" id="importJsonBtn">↑ JSON</button>
+        </div>
+        <input type="file" id="importTxtFile" accept=".txt">
+        <input type="file" id="importJsonFile" accept=".json">
+        <div class="io-stats">
+            wordlist: <span id="ioWordlistCount">0</span> entries &nbsp;|&nbsp;
+            saved: <span id="ioSavedCount">0</span> entries
+        </div>
+    </div>
+
+    <div class="terminal-line">
+        <span class="terminal-prompt">$></span>
+        <span id="terminalMsg">system ready</span>
+        <span class="cursor"></span>
+    </div>
+    <div class="stats">
+        <span>database entries</span>
+        <span class="stats-count" id="uaCount">0</span>
+    </div>
+    <div class="warning">⚡ this is not a game ⚡</div>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
