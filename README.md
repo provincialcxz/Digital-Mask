@@ -1,5 +1,4 @@
-# [FSOCIETY]      
-# Digital-Mask: User-Agent Switcher    
+# [FSOCIETY] Digital-Mask: User-Agent Switcher    
 
 > *"Hello, friend."*
 
@@ -57,10 +56,12 @@ A Google Chrome extension for full browser fingerprint spoofing — User-Agent, 
 
 ## Installation
 
-**Preferred option:**   
-Go to the extension page on [Google Chrome]().
+**Preferred option:**  
 
-**Local assembly:**   
+Go to the extension page on [Google Chrome]().  
+
+
+**Local assembly:**  
 1. Download or clone the repository
 2. Open `chrome://extensions`
 3. Enable **Developer mode**
